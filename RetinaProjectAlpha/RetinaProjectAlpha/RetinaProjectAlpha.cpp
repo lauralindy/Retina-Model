@@ -101,29 +101,28 @@ public:
 		}
 		return 'G';
 	}
-	void setInputs(int lightIntensity, int lightFrequency, int lightAngle) {
+	virtual void setInputs(int lightIntensity, int lightFrequency, int lightAngle) override {
 		//TODO: Actually do something with this
 	}
 
-public:
 	virtual const char getType() override {
 		// ALLOWS for visual display of weather it is a rod or a con being generated
 		return 'C';
 	}
 };
 class Rod : public Photoreceptor {
-	void setInputs(int lightIntensity, int lightFrequency, int lightAngle) {
-		//TODO: Actually so something with this too
-	}
-
 public:
 	virtual const char getType() override {
-		// ALLOWS for visual display of weather it is a rod or a con being generated
+		// ALLOWS for visual display of whether it is a rod or a cone being generated
 		return 'R';
 	}
 
 	virtual const char getRGB() override {
 		return ' ';
+	}
+	
+	virtual void setInputs(int lightIntensity, int lightFrequency, int lightAngle) override {
+		//TODO: Actually do something with this
 	}
 };
 
@@ -134,11 +133,19 @@ public:
 	Bipolar() : Neuron(-40 /*Not sure what this number is for the bipolar cells*/, true) {  }
 };
 
+class Amacrine : public Neuron {
+
+public:
+	Amacrine() {}
+};
 class Ganglion : public Neuron {
+
+	std::vector<Bipolar> bipolarInput;
+	std::vector<Amacrine> amacrineInput;
+
 public:
 	Ganglion() {}
 };
-
 
 
 Photoreceptor* builder(int num) {
@@ -164,15 +171,8 @@ Photoreceptor* builder(int num) {
 			count++;
 			return p;
 		}
-
-
 	}
-
-
-
 }
-
-
 
 
 int main()
@@ -198,7 +198,6 @@ int main()
 	std::cout << "Display of Rod and Cone Generator : \n\n";
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < col; ++j) {
-
 			std::cout << x[i][j]->getType();
 		}
 		std::cout << '\n';
@@ -208,13 +207,7 @@ int main()
 
 	for (int i = 0; i < rows; ++i) {
 		for (int j = 0; j < col; ++j) {
-
-			if (x[i][j]->getType() == 'c') {
-				std::cout << x[i][j]->getRGB();
-			}
-			else {
-				std::cout << x[i][j]->getRGB();
-			}
+			std::cout << x[i][j]->getRGB();
 		}
 		std::cout << '\n';
 	}
@@ -222,8 +215,4 @@ int main()
 	std::cin >> xy;
 
 	return 0;
-
-
 }
-
-
